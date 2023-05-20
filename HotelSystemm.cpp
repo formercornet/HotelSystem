@@ -6,6 +6,7 @@
 #include <vector>
 using namespace std;
 
+vector<User> users;
 
 class User {
 
@@ -384,6 +385,100 @@ public:
 };
 */
 
+
+
+class Payment {
+private:
+    string Payment_method;
+    float amount_paid;
+public:
+    void setPaymentMethod(const string& paymentMethod) {
+        int pay, Expmonth, Expyear, CVV; // Expiry month and year
+        string CardHolderF, CardHolderS; // first and second name
+        long creditNum;
+        cout << "Choose Your payment method (For Cash type 1, For Credit Card type 2): ";
+        cin >> pay; cout << endl;
+        if (pay == 1)
+            cout << "Please pay at the nearest Fawry to you" << endl;
+        if (pay == 2) {
+            cout << "Enter your Credit Card Information" << endl;
+            cout << "Card holder first name: ";
+            cin >> CardHolderF; cout << endl;
+            cout << "Card holder second name: ";
+            cin >> CardHolderS; cout << endl;
+            cout << "Credit Card number: ";
+            cin >> creditNum; cout << endl;
+            cout << "Expiry month: ";
+            cin >> Expmonth; cout << endl;
+            cout << "Expiry year: ";
+            cin >> Expyear; cout << endl;
+            cout << "CVV: ";
+            cin >> CVV; cout << endl;
+        }
+        Payment_method = paymentMethod;
+    }
+
+    string getPaymentMethod() {
+        return this->Payment_method;
+    }
+
+    void setAmountPaid(float amountPaid) {
+        amount_paid = amountPaid;
+    }
+
+    float getAmountPaid() const {
+        return amount_paid;
+    }
+};
+
+enum class DiscountType {
+    Coupon, Other
+};
+
+class Discount {
+private:
+    float discountRate;
+    string Coupon;
+    DiscountType discountType;
+
+public:
+    // Constructor
+    Discount() {
+        discountRate = 0.0f;
+        Coupon = "";
+        discountType = DiscountType::Other; // b3deen n3ml if statement ll discount type <Membership, GovAndMilitary, PromoDisc, PackDisc>
+    }
+
+    void setDiscountRate(float rate) {
+        discountRate = rate;
+    }
+
+    void setCoupon(const string& couponCode) {
+        Coupon = couponCode;
+        discountType = DiscountType::Coupon;
+    }
+
+    float getDiscountRate() const {
+        return discountRate;
+    }
+
+    string getCoupon() const {
+        return Coupon;
+    }
+
+    float calculateDiscountedAmount(float originalAmount) const {
+        if (discountType == DiscountType::Coupon) {
+            std::cout << "Applying coupon: " << Coupon << endl;
+            return originalAmount - discountRate;
+        }
+        else {
+            std::cout << "Applying other discount" << endl;
+            return originalAmount * (1 - discountRate);
+        }
+    }
+};
+
+
 void meal_plan_editting_menu() {
     vector<MealPlan> mealPlans;
     while (true) {
@@ -504,7 +599,7 @@ void meal_plan_editting_menu() {
 
 
 void editting_menu() {
-    
+
     while (true) {
         int choice, meal_plan_choice;
         cout << "Editing menu" << endl
@@ -519,13 +614,13 @@ void editting_menu() {
         if (choice == 1) {
             while (true) {
                 cout << "Hotel Buildings";
-                
+
             }
         }
         else if (choice == 2) {
             while (true) {
                 cout << "Rooms";
-                
+
             }
         }
 
@@ -535,7 +630,7 @@ void editting_menu() {
         else if (choice == 4) {
             while (true) {
                 cout << "Cleaning Schedules";
-                
+
             }
         }
         else if (choice == 5) {
@@ -547,119 +642,74 @@ void editting_menu() {
 
 }
 
-void booking_menu() {
-
+void register_account() {
+    vector<User> users;
+    string user;
+    string password;
+    string first_name;
+    string last_name;
+    string email;
+    string phone;
+    string address;
+    cout << "Enter username: ";
+    cin >> user;
+    cout << endl << "Enter password: ";
+    cin >> password;
+    cout << endl << "Enter first name: ";
+    cin >> first_name;
+    cout << endl << "Enter last name: ";
+    cin >> last_name;
+    cout << endl << "Email: ";
+    cin >> email;
+    cout << endl << "Enter phone number: ";
+    cin >> phone;
+    cout << endl << "Enter address: ";
+    cin.ignore();
+    getline(cin, address);
+    User new_user(user, password, first_name, last_name, email, phone, address);
+    users.push_back(new_user);
 }
+
+void login_account() {
+    cout << "login" << endl;
+}
+
+void booking_menu() {
+    cout << endl;
+    while (true) {
+        int choice;
+        cout << "1: Register" << endl
+            << "2: Login" << endl
+            << "3: Go back" << endl;
+        cin >> choice;
+        if (choice == 1) register_account();
+        else if (choice == 2) login_account();
+        else if (choice == 3) break;
+    }
+}
+
+
 
 void main_menu() {
     while (true) {
         int first_choice;
         cout << "1: Make a booking" << endl
-            << "2: Editting menu" << endl
-            << "3: Exit Program" << endl;
+            << "2: Cancel booking" << endl
+            << "3: Editting menu" << endl
+            << "4: Exit Program" << endl;
         cin >> first_choice;
 
-        if (first_choice == 1) {
+        if (first_choice == 1) booking_menu();
 
-        }
-        else if (first_choice == 2) {
-            editting_menu();
-        }
-        else if (first_choice == 3) exit(1);
+        else if (first_choice == 2); //not done
+
+        else if (first_choice == 3) editting_menu();
+
+        else if (first_choice == 4) exit(1);
 
     }
 }
 
-class Payment {
-private:
-    string Payment_method;
-    float amount_paid;
-public:
-    void setPaymentMethod(const string& paymentMethod) {
-        int pay, Expmonth, Expyear, CVV; // Expiry month and year
-        string CardHolderF, CardHolderS; // first and second name
-        long creditNum;
-        cout << "Choose Your payment method (For Cash type 1, For Credit Card type 2): ";
-        cin >> pay; cout << endl;
-        if (pay == 1)
-            cout << "Please pay at the nearest Fawry to you" << endl;
-        if (pay == 2) {
-            cout << "Enter your Credit Card Information" << endl;
-            cout << "Card holder first name: ";
-            cin >> CardHolderF; cout << endl;
-            cout << "Card holder second name: ";
-            cin >> CardHolderS; cout << endl;
-            cout << "Credit Card number: ";
-            cin >> creditNum; cout << endl;
-            cout << "Expiry month: ";
-            cin >> Expmonth; cout << endl;
-            cout << "Expiry year: ";
-            cin >> Expyear; cout << endl;
-            cout << "CVV: ";
-            cin >> CVV; cout << endl;
-        }
-        Payment_method = paymentMethod;
-    }
-
-    string getPaymentMethod() {
-        return this->Payment_method;
-    }
-
-    void setAmountPaid(float amountPaid) {
-        amount_paid = amountPaid;
-    }
-
-    float getAmountPaid() const {
-        return amount_paid;
-    }
-};
-
-enum class DiscountType {
-    Coupon, Other
-};
-
-class Discount {
-private:
-    float discountRate;
-    string Coupon;
-    DiscountType discountType;
-
-public:
-    // Constructor
-    Discount() {
-        discountRate = 0.0f;
-        Coupon = "";
-        discountType = DiscountType::Other; // b3deen n3ml if statement ll discount type <Membership, GovAndMilitary, PromoDisc, PackDisc>
-    }
-
-    void setDiscountRate(float rate) {
-        discountRate = rate;
-    }
-
-    void setCoupon(const string& couponCode) {
-        Coupon = couponCode;
-        discountType = DiscountType::Coupon;
-    }
-
-    float getDiscountRate() const {
-        return discountRate;
-    }
-
-    string getCoupon() const {
-        return Coupon;
-    }
-
-    float calculateDiscountedAmount(float originalAmount) const {
-        if (discountType == DiscountType::Coupon) {
-            std::cout << "Applying coupon: " << Coupon << endl;
-            return originalAmount - discountRate;
-        }
-        else {
-            std::cout << "Applying other discount" << endl;
-            return originalAmount * (1 - discountRate);
-        }
-    }
-};
 
 int main() { 
 
