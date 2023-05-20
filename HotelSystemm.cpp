@@ -227,7 +227,7 @@ private:
     string customerName;
     string ratingMessage;
 };
-
+/*
 class Hotel {
 public:
     string Hotel_branch, Hotel_view;
@@ -382,11 +382,131 @@ public:
         cout << "The room number-code is:" << nO << v1 << v2 << v3 << endl;
     }
 };
+*/
 
-void main_menu() {
+void meal_plan_editting_menu() {
     vector<MealPlan> mealPlans;
     while (true) {
-        int choice, choice2;
+        int meal_plan_choice;
+        cout << "Meal Plans" << endl
+            << "---------------------" << endl
+            << "1: Make a new meal plan" << endl
+            << "2: Edit a meal plan" << endl
+            << "3: Delete a meal plan" << endl
+            << "4: Go back" << endl;
+        cin >> meal_plan_choice;
+        if (meal_plan_choice == 1) {
+            string type, description;
+            double price;
+            cout << "Please enter the meal plan type: " << endl;
+            cin.ignore();
+            getline(cin, type);
+            cout << "Please enter the meal plan description:  " << endl;
+            getline(cin, description);
+            cout << "Please enter the meal price: " << endl;
+            cin >> price;
+            MealPlan newPlan(type, description, price);
+            newPlan.displayInfo();
+            mealPlans.push_back(newPlan); // Add the new MealPlan object to the vector
+
+        }
+
+        else if (meal_plan_choice == 2) {
+            cout << "Meal Plans List:" << endl;
+            int count = 1;
+            for (const MealPlan& plan : mealPlans) {
+                cout << "Plan Number: " << count << endl;
+                plan.displayInfo();
+                cout << endl;
+                count++;
+            }
+            int planNumber;
+            cout << "Enter the plan number you want to edit: ";
+            cin >> planNumber;
+            if (planNumber >= 1 && planNumber <= mealPlans.size()) {
+                // Subtract 1 from planNumber to match the vector index
+                MealPlan& plan = mealPlans[planNumber - 1];
+
+                string newType, newDescription;
+                double newPrice;
+                int edit_parameter;
+                cout << "What do you want to edit? in the meal plans?" << endl
+                    << "-------------------------------" << endl
+                    << "1: Type" << endl
+                    << "2: Description" << endl
+                    << "3: Price" << endl
+                    << "4: Edit all" << endl;
+                cin >> edit_parameter;
+                if (edit_parameter == 1) {
+                    cout << "Enter new Meal plan Type: " << endl;
+                    cin.ignore();
+                    getline(cin, newType);
+                    plan.setType(newType);
+                    plan.displayInfo();
+                }
+                else if (edit_parameter == 2) {
+                    cout << "Enter new Meal plan Description: " << endl;
+                    cin.ignore();
+                    getline(cin, newDescription);
+                    plan.setDescription(newDescription);
+                    plan.displayInfo();
+                }
+                else if (edit_parameter == 3) {
+                    cout << "Enter new Meal plan Price: " << endl;
+                    cin >> newPrice;
+                    plan.setPrice(newPrice);
+                    plan.displayInfo();
+                }
+                else if (edit_parameter == 4) {
+                    cout << "Enter new Meal plan Type: " << endl;
+                    cin.ignore();
+                    getline(cin, newType);
+                    plan.setType(newType);
+                    cout << "Enter new Meal plan Description: " << endl;
+                    getline(cin, newDescription);
+                    plan.setDescription(newDescription);
+                    cout << "Enter new Meal plan Price: " << endl;
+                    cin >> newPrice;
+                    plan.setPrice(newPrice);
+                    plan.displayInfo();
+                }
+
+
+
+
+
+            }
+        }
+        else if (meal_plan_choice == 3) {
+            cout << "Meal Plans List:" << endl;
+            int count = 1;
+            int deleted_plan;
+            for (const MealPlan& plan : mealPlans) {
+                cout << "Plan Number: " << count << endl;
+                plan.displayInfo();
+                cout << endl;
+                count++;
+            }
+            cout << "Which plan do you want to delete?: " << endl;
+            cin >> deleted_plan;
+            if (deleted_plan >= 1 && deleted_plan <= mealPlans.size()) {
+                mealPlans.erase(mealPlans.begin() + deleted_plan - 1);
+                cout << "Plan successfully deleted." << endl;
+            }
+            else cout << "Invalid plan." << endl;
+
+        }
+        else if (meal_plan_choice == 4) break;
+    }
+}
+
+
+
+
+void editting_menu() {
+    
+    while (true) {
+        int choice, meal_plan_choice;
         cout << "Editing menu" << endl
             << "-------------------" << endl
             << "1: Hotel Buildings" << endl
@@ -399,143 +519,56 @@ void main_menu() {
         if (choice == 1) {
             while (true) {
                 cout << "Hotel Buildings";
-                cin >> choice2;
+                
             }
         }
         else if (choice == 2) {
             while (true) {
                 cout << "Rooms";
-                cin >> choice2;
+                
             }
         }
 
         else if (choice == 3) {
+            meal_plan_editting_menu();
+        }
+        else if (choice == 4) {
             while (true) {
-                cout << "Meal Plans" << endl
-                    << "---------------------" << endl
-                    << "1: Make a new meal plan" << endl
-                    << "2: Edit a meal plan" << endl
-                    << "3: Delete a meal plan" << endl
-                    << "4: Go back" << endl;
-                cin >> choice2;
-                if (choice2 == 1) {
-                    string type, description;
-                    double price;
-                    cout << "Please enter the meal plan type: " << endl;
-                    cin.ignore();
-                    getline(cin, type);
-                    cout << "Please enter the meal plan description:  " << endl;
-                    getline(cin, description);
-                    cout << "Please enter the meal price: " << endl;
-                    cin >> price;
-                    MealPlan newPlan(type, description, price);
-                    newPlan.displayInfo();
-                    mealPlans.push_back(newPlan); // Add the new MealPlan object to the vector
-
-                }
-
-                else if (choice2 == 2) {
-                    cout << "Meal Plans List:" << endl;
-                    int count = 1;
-                    for (const MealPlan& plan : mealPlans) {
-                        cout << "Plan Number: " << count << endl;
-                        plan.displayInfo();
-                        cout << endl;
-                        count++;
-                    }
-                    int planNumber;
-                    cout << "Enter the plan number you want to edit: ";
-                    cin >> planNumber;
-                    if (planNumber >= 1 && planNumber <= mealPlans.size()) {
-                        // Subtract 1 from planNumber to match the vector index
-                        MealPlan& plan = mealPlans[planNumber - 1];
-
-                        string newType, newDescription;
-                        double newPrice;
-                        int edit_parameter;
-                        cout << "What do you want to edit? in the meal plans?" << endl
-                            << "-------------------------------" << endl
-                            << "1: Type" << endl
-                            << "2: Description" << endl
-                            << "3: Price" << endl
-                            << "4: Edit all" << endl;
-                        cin >> edit_parameter;
-                        if (edit_parameter == 1) {
-                            cout << "Enter new Meal plan Type: " << endl;
-                            cin.ignore();
-                            getline(cin, newType);
-                            plan.setType(newType);
-                            plan.displayInfo();
-                        }
-                        else if (edit_parameter == 2) {
-                            cout << "Enter new Meal plan Description: " << endl;
-                            cin.ignore();
-                            getline(cin, newDescription);
-                            plan.setDescription(newDescription);
-                            plan.displayInfo();
-                        }
-                        else if (edit_parameter == 3) {
-                            cout << "Enter new Meal plan Price: " << endl;
-                            cin >> newPrice;
-                            plan.setPrice(newPrice);
-                            plan.displayInfo();
-                        }
-                        else if (edit_parameter == 4) {
-                            cout << "Enter new Meal plan Type: " << endl;
-                            cin.ignore();
-                            getline(cin, newType);
-                            plan.setType(newType);
-                            cout << "Enter new Meal plan Description: " << endl;
-                            getline(cin, newDescription);
-                            plan.setDescription(newDescription);
-                            cout << "Enter new Meal plan Price: " << endl;
-                            cin >> newPrice;
-                            plan.setPrice(newPrice);
-                            plan.displayInfo();
-                        }
-
-
-
-
-
-                    }
-                }
-                else if (choice2 == 3) {
-                    cout << "Meal Plans List:" << endl;
-                    int count = 1;
-                    int deleted_plan;
-                    for (const MealPlan& plan : mealPlans) {
-                        cout << "Plan Number: " << count << endl;
-                        plan.displayInfo();
-                        cout << endl;
-                        count++;
-                    }
-                    cout << "Which plan do you want to delete?: " << endl;
-                    cin >> deleted_plan;
-                    if (deleted_plan >= 1 && deleted_plan <= mealPlans.size()) {
-                        mealPlans.erase(mealPlans.begin() + deleted_plan - 1);
-                        cout << "Plan successfully deleted." << endl;
-                    }
-                    else cout << "Invalid plan." << endl;
-
-                }
-                else if (choice2 == 4) break;
+                cout << "Cleaning Schedules";
+                
             }
         }
-                else if (choice == 4) {
-                    while (true) {
-                        cout << "Cleaning Schedules";
-                        cin >> choice2;
-                    }
-                }
-                else if (choice == 5) {
-                    exit(1);
-                }
-            }
+        else if (choice == 5) {
+            exit(1);
+        }
+    }
 
 
+
+}
+
+void booking_menu() {
+
+}
+
+void main_menu() {
+    while (true) {
+        int first_choice;
+        cout << "1: Make a booking" << endl
+            << "2: Editting menu" << endl
+            << "3: Exit Program" << endl;
+        cin >> first_choice;
+
+        if (first_choice == 1) {
 
         }
+        else if (first_choice == 2) {
+            editting_menu();
+        }
+        else if (first_choice == 3) exit(1);
+
+    }
+}
 
 class Payment {
 private:
