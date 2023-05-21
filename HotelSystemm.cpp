@@ -2,6 +2,8 @@
 //
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
 using namespace std;
@@ -641,6 +643,18 @@ void editting_menu() {
 
 }
 
+void writing_user_details(const string& user, const string& password, const string& first_name, const string& last_name,const string& email, const string& phone, const string& address) {
+        ofstream file("../users.txt", ios::app);
+        if (file.is_open()) {
+            file << user << "," << password << "," << first_name << ","
+                << last_name << "," << email << ',' << phone << "," << address << endl;
+            file.close();
+            cout << "Registered successfully!" << endl;
+        }
+        else cout << "Couldn't open the file.";
+
+    }
+
 void register_account() {
     vector<User> users;
     string user;
@@ -666,7 +680,7 @@ void register_account() {
     cin.ignore();
     getline(cin, address);
     User new_user(user, password, first_name, last_name, email, phone, address);
-    users.push_back(new_user);
+    writing_user_details;
 }
 
 void login_account() {
@@ -675,8 +689,8 @@ void login_account() {
 
 void booking_menu() {
     cout << endl;
-    while (true) {
-        int choice;
+    int choice = 0;
+    while (choice != 1 && choice != 2) {
         cout << "1: Register" << endl
             << "2: Login" << endl
             << "3: Go back" << endl;
@@ -690,8 +704,8 @@ void booking_menu() {
 
 
 void main_menu() {
-    while (true) {
-        int first_choice;
+    int first_choice = 0;
+    while (first_choice != 1 && first_choice != 2 && first_choice != 3) {
         cout << "1: Make a booking" << endl
             << "2: Cancel booking" << endl
             << "3: Editting menu" << endl
@@ -707,6 +721,7 @@ void main_menu() {
         else if (first_choice == 4) exit(1);
 
     }
+    cout << "Rest of booking";
 }
 
 
