@@ -658,6 +658,7 @@ bool writing_user_details(const string& user, const string& password, const stri
         }
 
     }
+User user1;
 
 bool register_account() {
     string user;
@@ -682,7 +683,7 @@ bool register_account() {
     cout << endl << "Enter address: ";
     cin.ignore();
     getline(cin, address);
-    User new_user(user, password, first_name, last_name, email, phone, address);
+    user1 = User(user, password, first_name, last_name, email, phone, address);
     if (writing_user_details(user, password, first_name, last_name, email, phone, address)) return true;
     else return false;
 }
@@ -718,7 +719,7 @@ bool login_account(){
     cin >> username;
     cout << "Please type your password: " << endl;
     cin >> password;
-    User user1 = reading_users_details("users.txt", username, password);
+    user1 = reading_users_details("users.txt", username, password);
     if (user1.getUsername() != "") {
         cout << "Login successful!" << endl << "Username: " << username << endl;
         return true;
@@ -745,7 +746,10 @@ void booking_menu() {
         }
         else if (choice == 3) break;
     }
-    cout << "Supposed to continue booking now";
+    cout << "Continue booking here!"; // we will continue the booking process here
+    string name;
+    name = user1.getFirstname();
+    cout << endl << name;
 }
 
 
@@ -768,7 +772,6 @@ void main_menu() {
         else if (first_choice == 4) exit(1);
 
     }
-    
 }
 
 
