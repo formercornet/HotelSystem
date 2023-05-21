@@ -6,7 +6,6 @@
 #include <vector>
 using namespace std;
 
-vector<User> users;
 
 class User {
 
@@ -104,6 +103,8 @@ private:
     string phone;
     string address;
 };
+
+vector<User> users;
 
 class MealPlan {
 
@@ -604,8 +605,8 @@ void editting_menu() {
         int choice, meal_plan_choice;
         cout << "Editing menu" << endl
             << "-------------------" << endl
-            << "1: Hotel Buildings" << endl
-            << "2: Rooms" << endl
+            << "1: Room Pricing" << endl
+            << "2: Discounts" << endl
             << "3: Meal Plans" << endl
             << "4: Cleaning Schedules" << endl
             << "5: Exit program" << endl;
@@ -613,13 +614,13 @@ void editting_menu() {
 
         if (choice == 1) {
             while (true) {
-                cout << "Hotel Buildings";
+                cout << "Room Pricing";
 
             }
         }
         else if (choice == 2) {
             while (true) {
-                cout << "Rooms";
+                cout << "Discounts";
 
             }
         }
@@ -633,9 +634,7 @@ void editting_menu() {
 
             }
         }
-        else if (choice == 5) {
-            exit(1);
-        }
+        else if (choice == 5) exit(1);
     }
 
 
