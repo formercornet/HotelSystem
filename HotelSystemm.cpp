@@ -643,20 +643,23 @@ void editting_menu() {
 
 }
 
-void writing_user_details(const string& user, const string& password, const string& first_name, const string& last_name,const string& email, const string& phone, const string& address) {
-        ofstream file("../users.txt", ios::app);
+bool writing_user_details(const string& user, const string& password, const string& first_name, const string& last_name,const string& email, const string& phone, const string& address) {
+        ofstream file("./users.txt", ios::app);
         if (file.is_open()) {
             file << user << "," << password << "," << first_name << ","
                 << last_name << "," << email << ',' << phone << "," << address << endl;
             file.close();
             cout << "Registered successfully!" << endl;
+            return true;
         }
-        else cout << "Couldn't open the file.";
+        else {
+            cout << "Couldn't open the file.";
+            return false;
+        }
 
     }
 
-void register_account() {
-    vector<User> users;
+bool register_account() {
     string user;
     string password;
     string first_name;
@@ -680,25 +683,69 @@ void register_account() {
     cin.ignore();
     getline(cin, address);
     User new_user(user, password, first_name, last_name, email, phone, address);
-    writing_user_details;
+    if (writing_user_details(user, password, first_name, last_name, email, phone, address)) return true;
+    else return false;
 }
 
-void login_account() {
-    cout << "login" << endl;
+User reading_users_details(const string& file_name, const string& username, const string& password) {
+    ifstream file(file_name);
+    if (file.is_open()) {
+        string line;
+        while (getline(file, line)) {
+            stringstream ss(line);
+            string user, pass, first_name, last_name, email, phone, address;
+            getline(ss, user, ',');
+            getline(ss, pass, ',');
+            getline(ss, first_name, ',');
+            getline(ss, last_name, ',');
+            getline(ss, email, ',');
+            getline(ss, phone, ',');
+            getline(ss, address, ',');
+            if (user == username && pass == password) {
+                file.close();
+                return User(user, pass, first_name, last_name, email, phone, address);
+            }
+        }
+        file.close();
+    }
+
+    return User();
+}
+
+bool login_account(){
+    string username, password;
+    cout << "Please type your username: " << endl;
+    cin >> username;
+    cout << "Please type your password: " << endl;
+    cin >> password;
+    User user1 = reading_users_details("users.txt", username, password);
+    if (user1.getUsername() != "") {
+        cout << "Login successful!" << endl << "Username: " << username << endl;
+        return true;
+    }
+    else {
+        cout << "Login Failed!" << endl;
+        return false;
+    }
 }
 
 void booking_menu() {
     cout << endl;
     int choice = 0;
-    while (choice != 1 && choice != 2) {
+    while (true) {
         cout << "1: Register" << endl
             << "2: Login" << endl
             << "3: Go back" << endl;
         cin >> choice;
-        if (choice == 1) register_account();
-        else if (choice == 2) login_account();
+        if (choice == 1) {
+            if (register_account()) break;
+        }
+        else if (choice == 2) {
+            if (login_account()) break;
+        }
         else if (choice == 3) break;
     }
+    cout << "Supposed to continue booking now";
 }
 
 
@@ -721,7 +768,7 @@ void main_menu() {
         else if (first_choice == 4) exit(1);
 
     }
-    cout << "Rest of booking";
+    
 }
 
 
