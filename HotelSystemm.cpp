@@ -6,6 +6,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cstdlib> // required for rand() function
+#include <ctime>
 using namespace std;
 
 
@@ -231,7 +233,146 @@ private:
     string customerName;
     string ratingMessage;
 };
-/*
+
+class Room {
+private:
+    int room_num;
+    int floor;
+    string type;
+    bool booked;
+
+public:
+
+    Room() {
+        room_num = 0;
+        floor = 0;
+        type = "";
+        booked = false;
+    }
+
+    Room(int n, int f, string t) {
+        room_num = n;
+        floor = f;
+        type = t;
+    }
+
+
+    int getroomNum() {
+        return room_num;
+    }
+
+    int getFloor() {
+        return floor;
+    }
+
+    string getType() {
+        return type;
+    }
+
+    bool Booked() {
+        return booked;
+    }
+
+    void setBooked(bool val) {
+        booked = val;
+    }
+};
+
+void readRoomsFromFile(vector<Room>& rooms, const string& file_name) {
+    ifstream file(file_name);
+    if (file.is_open()) {
+        int n, f;
+        string line;
+        string type;
+        string booked;
+
+        while (getline(file, line)) {
+            stringstream ss(line);
+            getline(ss, type, '-');
+            ss >> f;
+            ss.ignore();
+            ss >> n;
+            ss.ignore();
+            getline(ss, booked);
+            Room room(n, f, type);
+            room.setBooked(booked == "true");
+            rooms.push_back(room);
+        }
+        file.close();
+    }
+}
+
+void generateRooms(vector<Room>& rooms) {
+    // Generate room combinations
+    for (int i = 1; i <= 3; ++i) {
+        for (int j = 1; j <= 100; ++j) {
+            string type;
+            if (j >= 1 && j <= 50) {
+                type = "S";
+            }
+            else if (j >= 51 && j <= 80) {
+                type = "D";
+            }
+            else {
+                type = "SU";
+            }
+
+            rooms.push_back(Room(j, i, type));
+        }
+    }
+}
+
+void room_update(vector<Room>& rooms, const string& file_name) {
+    ofstream file(file_name);
+    if (file.is_open()) {
+        for (Room& room : rooms) {
+
+            file << room.getType() << room.getFloor() << "-" << room.getroomNum() << ", ";
+            if (room.Booked()) {
+                file << "true";
+            }
+            else {
+                file << "false";
+            }
+            file << endl;
+        }
+        file.close();
+    }
+}
+
+void bookRoom(vector<Room>& rooms) {
+    string type;
+    int floor, number;
+
+    cout << "Room type: S (single), D (double), SU (suite): ";
+    cin >> type;
+
+    cout << "Floor number (1, 2, 3): ";
+    cin >> floor;
+
+    cout << "Room number (1-100): ";
+    cin >> number;
+
+    string roomCode = type + to_string(floor) + "-" + to_string(number);
+
+    for (Room& room : rooms) {
+        if (room.getType() + to_string(room.getFloor()) + "-" + to_string(room.getroomNum()) == roomCode) {
+            if (room.Booked()) {
+                cout << "Already Booked." << endl;
+                return;
+            }
+            else {
+                room.setBooked(true);
+                cout << "Room " << roomCode << " has been booked successfully." << endl;
+                return;
+            }
+        }
+    }
+
+
+}
+
+/*]
 class Hotel {
 public:
     string Hotel_branch, Hotel_view;
@@ -390,33 +531,93 @@ public:
 
 
 
-class Payment {
+class CreditCard {
+private:
+    vector <char> creditCardNumber();
+    string expirationDate;
+    string CVV;
+
+public:
+    CreditCard() {
+        creditCardNumber() = {};
+        expirationDate = "12/24";
+        CVV = "123";
+    }
+    //    CreditCard(string creditCardNumber_ ,string expirationDate_,string cVV){
+    //        creditCardNumber();
+    //        expirationDate = expirationDate_;
+    //        CVV = cVV;
+    //    }
+
+    void setCreditCardNumber(initializer_list<char> creditCardNumber_) {
+        CreditCard::creditCardNumber() = creditCardNumber_;
+    }
+
+    const vector<char>& getCreditCardNumber() {
+        return this->creditCardNumber();
+    }
+
+    void setExpirationDate(const string& expirationDate_) {
+        CreditCard::expirationDate = expirationDate_;
+    }
+
+    const string& getExpirationDate() const {
+        return expirationDate;
+    }
+
+    void setCvv(const string& cVV) {
+        CVV = cVV;
+    }
+
+    const string& getCvv() const {
+        return CVV;
+    }
+    string creditcardData(string CVV, string expirationDate, vector <char> creditCardNumber) {
+        cout << "Please enter your credit card information: " << endl;
+        cout << "Credit Card Number: ";
+        for (int i = 0; i < 16; i++) {
+            int cc; cin >> cc;
+            creditCardNumber.push_back(cc);
+            //            if (isdigit(cc) == true) {
+            //                string *ccptr = &cc;
+            //                return;
+        }
+        cout << endl;
+
+        cout << "Expiration date  (month/year): ";
+        cin >> expirationDate; cout << endl;
+
+        cout << "CVV: ";
+        cin >> CVV; cout << endl;
+    }
+
+};
+class Payment : public CreditCard {
 private:
     string Payment_method;
     float amount_paid;
 public:
+    Payment() {
+        Payment_method = "";
+        amount_paid = 0.0;
+    }
+    Payment(string paymentMethod, float amountPaid) {
+        Payment_method = paymentMethod;
+        amount_paid = amountPaid;
+    }
     void setPaymentMethod(const string& paymentMethod) {
-        int pay, Expmonth, Expyear, CVV; // Expiry month and year
-        string CardHolderF, CardHolderS; // first and second name
-        long creditNum;
+        int pay;
+        string cvv, expDate;
+        vector <char> credit_number;
         cout << "Choose Your payment method (For Cash type 1, For Credit Card type 2): ";
         cin >> pay; cout << endl;
-        if (pay == 1)
+        if (pay == 1) {
             cout << "Please pay at the nearest Fawry to you" << endl;
+            srand(time(0)); int bill_id = rand() % 100 + 1;
+            cout << "Your Bill ID: " << bill_id << endl;
+        }
         if (pay == 2) {
-            cout << "Enter your Credit Card Information" << endl;
-            cout << "Card holder first name: ";
-            cin >> CardHolderF; cout << endl;
-            cout << "Card holder second name: ";
-            cin >> CardHolderS; cout << endl;
-            cout << "Credit Card number: ";
-            cin >> creditNum; cout << endl;
-            cout << "Expiry month: ";
-            cin >> Expmonth; cout << endl;
-            cout << "Expiry year: ";
-            cin >> Expyear; cout << endl;
-            cout << "CVV: ";
-            cin >> CVV; cout << endl;
+            cout << CreditCard::creditcardData(cvv, expDate, credit_number);
         }
         Payment_method = paymentMethod;
     }
@@ -449,7 +650,7 @@ public:
     Discount() {
         discountRate = 0.0f;
         Coupon = "";
-        discountType = DiscountType::Other; // b3deen n3ml if statement ll discount type <Membership, GovAndMilitary, PromoDisc, PackDisc>
+        discountType = DiscountType::Other;
     }
 
     void setDiscountRate(float rate) {
@@ -469,16 +670,56 @@ public:
         return Coupon;
     }
 
-    float calculateDiscountedAmount(float originalAmount) const {
-        if (discountType == DiscountType::Coupon) {
-            std::cout << "Applying coupon: " << Coupon << endl;
-            return originalAmount - discountRate;
+    void setCouponFromFile(const string& filename) {
+        ifstream file(filename);
+        if (file.is_open()) {
+            getline(file, Coupon);
+            discountType = DiscountType::Coupon;
         }
         else {
-            std::cout << "Applying other discount" << endl;
+            cout << "-1";
+        }
+        file.close();
+    }
+
+    float calculateDiscountedAmount(float originalAmount) const {
+        if (discountType == DiscountType::Coupon) {
+            cout << "Applying coupon: " << Coupon << endl;
+            return originalAmount - discountRate;
+        }
+        if (discountType == DiscountType::Other) {
+            cout << "Applying other discount" << endl;
             return originalAmount * (1 - discountRate);
         }
     }
+
+};
+
+class Bill {
+private:
+    User info;
+    Payment amount_paid;
+public:
+    void setUserdata(const User& userdata) {
+        Bill::info = userdata;
+    }
+
+    const User& getUserdata() const {
+        return info;
+    }
+
+    void setAmountPaid(const Payment& amountPaid) {
+        amount_paid = amountPaid;
+    }
+
+    const Payment& getAmountPaid() const {
+        return amount_paid;
+    }
+    void BillGeneration(const Payment& amountpaid, User& info) {
+        info.displayInfo();
+        cout << "Total: " << amountpaid.getAmountPaid() << endl;
+    }
+
 };
 
 
@@ -729,7 +970,7 @@ bool login_account(){
         return false;
     }
 }
-
+vector<Room> rooms;
 void booking_menu() {
     cout << endl;
     int choice = 0;
@@ -746,10 +987,13 @@ void booking_menu() {
         }
         else if (choice == 3) break;
     }
-    cout << "Continue booking here!"; // we will continue the booking process here
+    bookRoom(rooms);
+    room_update(rooms, "room_data.txt");
+    //we will continue the booking process here
+    /*
     string name;
     name = user1.getFirstname();
-    cout << endl << name;
+    cout << endl << name; */
 }
 
 
@@ -774,32 +1018,11 @@ void main_menu() {
     }
 }
 
-
-int main() { 
-
+int main() {
+    
+    generateRooms(rooms);
+    room_update(rooms, "room_data.txt");
     main_menu();
-    /*
-    Payment payment;
-    Discount discount;
-    float discountRate;
-    string couponCode;
-    payment.setPaymentMethod("Cash");
-    cout << "Payment Method: " << payment.getPaymentMethod() << endl;
-    payment.setAmountPaid(100.0);
-    cout << "Amount Paid: " << payment.getAmountPaid() << endl;
-
-    cout << "Enter the discount rate: ";
-    cin >> discountRate;
-    discount.setDiscountRate(discountRate);
-    cout << "Enter the coupon code: ";
-    cin >> couponCode;
-    discount.setCoupon(couponCode);
-    float rate = discount.getDiscountRate();
-    string coupon = discount.getCoupon();
-    float originalAmount = 100.0f;
-    float discountedAmount = discount.calculateDiscountedAmount(originalAmount);
-    cout << "Discount Rate: " << rate << endl;
-    cout << "Coupon: " << coupon << endl;
-    cout << "Original Amount: " << originalAmount << endl;
-    cout << "Discounted Amount: " << discountedAmount << endl; */
 }
+
+
